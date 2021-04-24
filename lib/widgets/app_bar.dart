@@ -28,20 +28,22 @@ class AppBarWidget extends PreferredSize {
                             ),
                           ])),
                       Container(
-                        height: 58,
-                        width: 58,
+                        height: 48,
+                        width: 48,
                         decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(
-                                'https://github.com/mayconsgs.png'),
-                          ),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
+                            image: const DecorationImage(
+                              image: NetworkImage(
+                                  'https://avatars.githubusercontent.com/u/59394133?v=4'),
+                            ),
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.fromBorderSide(
+                              BorderSide(color: Color(0xFF7149CD), width: 2),
+                            )),
                       )
                     ],
                   ),
                 ),
-                Align(alignment: Alignment(0, 1.2), child: ScoreCardWidget())
+                Align(alignment: Alignment(0, 1), child: ScoreCardWidget())
               ],
             ),
           ),
