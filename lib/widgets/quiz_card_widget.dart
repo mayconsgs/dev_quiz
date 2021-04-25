@@ -1,10 +1,14 @@
 import 'package:dev_quiz/core/app_colors.dart';
-import 'package:dev_quiz/core/app_images.dart';
 import 'package:dev_quiz/core/app_text_styles.dart';
+import 'package:dev_quiz/models/quiz_model.dart';
 import 'package:dev_quiz/widgets/linear_progress_widget.dart';
 import 'package:flutter/material.dart';
 
 class QuizCardWidget extends StatelessWidget {
+  final QuizModel quiz;
+
+  QuizCardWidget({required this.quiz});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,13 +23,13 @@ class QuizCardWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(
-            AppImages.blocks,
+            quiz.image,
             height: 40,
             width: 40,
             fit: BoxFit.contain,
           ),
           Text(
-            'Gerenciamento de estado',
+            quiz.title,
             style: AppTextStyles.heading15,
           ),
           Row(
@@ -34,13 +38,14 @@ class QuizCardWidget extends StatelessWidget {
               Expanded(
                 flex: 2,
                 child: Text(
-                  '3 de 10',
+                  '${quiz.questionAnswered} de ${quiz.questions.length}',
                   style: AppTextStyles.body11,
                 ),
               ),
               Expanded(
                 flex: 3,
-                child: LinearProgressWidget(value: 0.3),
+                child: LinearProgressWidget(
+                    value: quiz.questionAnswered / quiz.questions.length),
               ),
             ],
           )

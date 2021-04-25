@@ -1,11 +1,12 @@
 import 'package:dev_quiz/core/app_text_styles.dart';
+import 'package:dev_quiz/models/question_model.dart';
 import 'package:dev_quiz/widgets/awnser_widget.dart';
 import 'package:flutter/material.dart';
 
 class QuizWidget extends StatelessWidget {
-  final String title;
+  final QuestionModel question;
 
-  const QuizWidget({Key? key, required this.title}) : super(key: key);
+  const QuizWidget({Key? key, required this.question}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,31 +17,19 @@ class QuizWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            title,
+            question.title,
             style: AppTextStyles.heading,
           ),
           const SizedBox(height: 24),
-          AwnserWidget(
-            label: 'Kit de desenvolvimento de interface de usuário',
-            isRight: false,
-            isSelected: false,
-          ),
-          AwnserWidget(
-            label:
-                'Possibilita a criação de aplicativos compilados nativamente',
-            isRight: true,
-            isSelected: true,
-          ),
-          AwnserWidget(
-            label: 'Acho que é uma marca de café do Himalaia',
-            isRight: false,
-            isSelected: false,
-          ),
-          AwnserWidget(
-            label: 'Possibilita a criação de desktops que são muito incríveis',
-            isRight: false,
-            isSelected: false,
-          ),
+          ...question.awnsers
+              .map(
+                (e) => AwnserWidget(
+                  label: e.label,
+                  isRight: e.isRight,
+                  isSelected: false,
+                ),
+              )
+              .toList()
         ],
       ),
     );
