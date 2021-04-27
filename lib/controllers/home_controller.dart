@@ -1,41 +1,42 @@
-import 'dart:convert';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dev_quiz/models/quiz_model.dart';
 import 'package:dev_quiz/models/user_model.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/state_manager.dart';
 
 enum HomeState { success, loading, error, empty }
 
-class HomeController {
-  ValueNotifier<HomeState> stateNotifier =
-      ValueNotifier<HomeState>(HomeState.empty);
+class HomeController extends GetxController {
+  final _state = HomeState.empty.obs;
 
-  set state(HomeState state) => stateNotifier.value = state;
-  HomeState get state => stateNotifier.value;
+  HomeState get state => _state.value;
 
   UserModel? user;
   List<QuizModel>? quizzes;
 
   _getUser() async {
-    final response = await rootBundle.loadString('database/user.json');
+    final uid = FirebaseAuth.instance.currentUser!.uid;
 
-    user = UserModel.fromJson(response);
+    final userDocument =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+    user = UserModel.fromMap(userDocument.data()!);
   }
 
   _getQuizzes() async {
-    final response = await rootBundle.loadString('database/quizzes.json');
-    final list = jsonDecode(response) as List;
+    final quizzesDocuments =
+        await FirebaseFirestore.instance.collection('quizzes').get();
 
-    quizzes = list.map((e) => QuizModel.fromMap(e)).toList();
+    quizzes =
+        quizzesDocuments.docs.map((e) => QuizModel.fromMap(e.data())).toList();
   }
 
   Future<void> getInitialData() async {
-    state = HomeState.loading;
+    _state.value = HomeState.loading;
 
     await _getUser();
     await _getQuizzes();
 
-    state = HomeState.success;
+    _state.value = HomeState.success;
   }
 }
