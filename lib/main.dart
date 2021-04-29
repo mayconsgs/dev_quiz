@@ -18,6 +18,7 @@ class AndroidApp extends StatelessWidget {
       title: "DevQuiz",
       theme: ThemeData(
         primaryColor: AppColors.purple,
+        accentColor: AppColors.purple,
         cardTheme: CardTheme(
           color: AppColors.white,
           elevation: 0,
@@ -29,6 +30,8 @@ class AndroidApp extends StatelessWidget {
         ),
         inputDecorationTheme: InputDecorationTheme(
           contentPadding: EdgeInsets.all(16),
+          fillColor: AppColors.white,
+          filled: true,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -92,8 +95,14 @@ class AndroidApp extends StatelessWidget {
                 fontSize: 15,
               ),
             ),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
           ),
         ),
+        scaffoldBackgroundColor: Color(0xFFF5F5FA),
       ),
       home: FutureBuilder<FirebaseApp>(
         future: Firebase.initializeApp(),

@@ -5,7 +5,6 @@ import 'package:dev_quiz/screens/challenge_screen.dart';
 import 'package:dev_quiz/widgets/app_bar.dart';
 import 'package:dev_quiz/widgets/level_button_widget.dart';
 import 'package:dev_quiz/widgets/quiz_card_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,6 +20,7 @@ class HomeScreen extends StatelessWidget {
             return Scaffold(
               appBar: AppBarWidget(
                 user: controller.user!,
+                context: context,
               ),
               body: Column(
                 children: [
@@ -47,6 +47,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: GridView.count(
+                      physics: ScrollPhysics(),
                       padding: EdgeInsets.all(16),
                       crossAxisCount: 2,
                       mainAxisSpacing: 16,
@@ -68,9 +69,6 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              floatingActionButton: FloatingActionButton(onPressed: () {
-                FirebaseAuth.instance.signOut();
-              }),
             );
 
           return Scaffold(

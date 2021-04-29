@@ -17,34 +17,26 @@ class ChallengeScreen extends StatelessWidget {
         child: SafeArea(
           top: true,
           child: Container(
-            padding: const EdgeInsets.only(right: 16),
-            child: Row(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                BackButton(color: AppColors.lightGrey),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Obx(
-                            () => Text(
-                                'Questão ${controller.questionAnswered + 1}',
-                                style: AppTextStyles.body),
-                          ),
-                          Text('de ${controller.totalQuestions}',
-                              style: AppTextStyles.body),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Obx(
-                        () => LinearProgressWidget(
-                            value: controller.questionAnswered /
-                                controller.totalQuestions),
-                      ),
-                    ],
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Obx(
+                      () => Text('Questão ${controller.questionAnswered + 1}',
+                          style: AppTextStyles.body),
+                    ),
+                    Text('de ${controller.totalQuestions}',
+                        style: AppTextStyles.body),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Obx(
+                  () => LinearProgressWidget(
+                      value: controller.questionAnswered /
+                          controller.totalQuestions),
                 ),
               ],
             ),
