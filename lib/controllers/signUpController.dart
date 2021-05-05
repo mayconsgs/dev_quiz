@@ -33,7 +33,8 @@ class SignUpController extends GetxController {
   File get image => _image.value;
 
   getImage() async {
-    final pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
+    final pickedFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       _image.value = File(pickedFile.path);
@@ -44,6 +45,7 @@ class SignUpController extends GetxController {
     _isLoading.value = true;
 
     String photoUrl = 'https://avatars.githubusercontent.com/u/59394133?v=4';
+    User? user;
 
     try {
       UserCredential userCredential =
@@ -52,26 +54,34 @@ class SignUpController extends GetxController {
         password: passController.text,
       );
 
-      if (hasImage) {
-        photoUrl = await FirebaseStorage.instance
-            .ref('usersProfileImages')
-            .child(path.basename(image.path).replaceAll(' ', '-').toLowerCase())
-            .putFile(image)
-            .snapshot
-            .ref
-            .getDownloadURL();
-      }
-
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userCredential.user!.uid)
-          .set(
-              UserModel(name: nameController.text, photoUrl: photoUrl).toMap());
+      user = userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         _passWeak.value = true;
       } else if (e.code == 'email-already-in-use') {
         _emailExist.value = true;
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    try {
+      if (hasImage && user != null) {
+        final taskSnapshot = await FirebaseStorage.instance
+            .ref('usersProfileImages')
+            .child(path.basename(image.path).replaceAll(' ', '-').toLowerCase())
+            .putFile(image);
+
+        photoUrl = await taskSnapshot.ref.getDownloadURL();
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    try {
+      if (user != null) {
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set(
+            UserModel(name: nameController.text, photoUrl: photoUrl).toMap());
       }
     } catch (e) {
       print(e);

@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/state_manager.dart';
 
-class LoginController extends GetxController {
+class SignInController extends GetxController {
   final _isLoading = false.obs;
 
   final loginController = TextEditingController();
@@ -12,6 +12,10 @@ class LoginController extends GetxController {
 
   String get login => loginController.text;
   String get pass => passController.text;
+
+  final _loginError = false.obs;
+
+  bool get hasLoginError => _loginError.value;
 
   Future<void> signIn() async {
     _isLoading.value = true;
@@ -23,9 +27,9 @@ class LoginController extends GetxController {
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        _loginError.value = true;
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+        _loginError.value = true;
       }
     }
 

@@ -53,7 +53,7 @@ class ChallengeScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: controller.nextQuestion,
                   child: Text('Pular'),
                 ),
               ),
@@ -62,8 +62,7 @@ class ChallengeScreen extends StatelessWidget {
                 child: Obx(
                   () => ElevatedButton(
                     onPressed: controller.validateQuestion
-                        ? controller.questionAnswered + 1 ==
-                                controller.totalQuestions
+                        ? controller.lastQuestion
                             ? () {
                                 Get.off(() => EndQuizScreen());
                               }
@@ -74,10 +73,8 @@ class ChallengeScreen extends StatelessWidget {
                           MaterialStateProperty.all(AppColors.darkGreen),
                     ),
                     child: controller.validateQuestion
-                        ? Text(controller.questionAnswered + 1 ==
-                                controller.totalQuestions
-                            ? 'Finalizar'
-                            : 'Próxima')
+                        ? Text(
+                            controller.lastQuestion ? 'Finalizar' : 'Próxima')
                         : Text('Confirmar'),
                   ),
                 ),

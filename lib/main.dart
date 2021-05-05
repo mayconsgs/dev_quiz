@@ -1,6 +1,7 @@
 import 'package:dev_quiz/core/app_colors.dart';
+import 'package:dev_quiz/screens/confirm_email_screen.dart';
 import 'package:dev_quiz/screens/home_screen.dart';
-import 'package:dev_quiz/screens/login_screen.dart';
+import 'package:dev_quiz/screens/signin_screen.dart';
 import 'package:dev_quiz/screens/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -116,11 +117,17 @@ class AndroidApp extends StatelessWidget {
           }
 
           if (snapshot.connectionState == ConnectionState.done) {
-            FirebaseAuth.instance.authStateChanges().listen((user) {
+            FirebaseAuth.instance.authStateChanges().listen((user) async {
               if (user == null) {
                 Get.offAll(() => LoginScreen());
               } else {
-                Get.offAll(() => HomeScreen());
+                await FirebaseAuth.instance.currentUser!.reload();
+
+                if (FirebaseAuth.instance.currentUser!.emailVerified) {
+                  Get.offAll(() => HomeScreen());
+                } else {
+                  Get.offAll(() => ConfirmEmailScreen());
+                }
               }
             });
           }

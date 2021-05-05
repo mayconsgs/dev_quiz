@@ -7,33 +7,39 @@ class AwnserWidget extends StatelessWidget {
   final bool isRight;
   final bool isSelected;
   final bool validate;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   AwnserWidget({
     required this.label,
     this.isRight = false,
     this.isSelected = false,
     this.validate = false,
-    required this.onTap,
+    this.onTap,
   });
 
-  Color get _selectedBackgroundCardRight => validate
-      ? isRight
-          ? AppColors.lightGreen
-          : AppColors.lightRed
+  Color get _selectedBackgroundCardRight => isSelected
+      ? validate
+          ? isRight
+              ? AppColors.lightGreen
+              : AppColors.lightRed
+          : AppColors.white
       : AppColors.white;
 
-  Color get _selectedBorderCardRight => validate
-      ? isRight
-          ? AppColors.green
-          : AppColors.red
-      : AppColors.purple;
+  Color get _selectedBorderCardRight => isSelected
+      ? validate
+          ? isRight
+              ? AppColors.green
+              : AppColors.red
+          : AppColors.purple
+      : AppColors.border;
 
-  TextStyle get _selectedTextStyleRight => validate
-      ? isRight
-          ? AppTextStyles.bodyDarkGreen
-          : AppTextStyles.bodyDarkRed
-      : AppTextStyles.bodyPurple;
+  TextStyle get _selectedTextStyleRight => isSelected
+      ? validate
+          ? isRight
+              ? AppTextStyles.bodyDarkGreen
+              : AppTextStyles.bodyDarkRed
+          : AppTextStyles.bodyPurple
+      : AppTextStyles.body;
 
   IconData get _selectedIconRight => validate
       ? isRight
@@ -53,11 +59,13 @@ class AwnserWidget extends StatelessWidget {
           : AppColors.lightRed
       : AppColors.white;
 
-  Color get _selectedIconBoxShadowRight => validate
-      ? isRight
-          ? Color.fromARGB(102, 4, 211, 97)
-          : Color.fromARGB(102, 204, 55, 80)
-      : Color.fromARGB(102, 130, 87, 229);
+  Color get _selectedIconBoxShadowRight => isSelected
+      ? validate
+          ? isRight
+              ? AppColors.darkGreen.withOpacity(0.4)
+              : AppColors.darkRed.withOpacity(0.4)
+          : AppColors.purple.withOpacity(0.4)
+      : Colors.transparent;
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +73,11 @@ class AwnserWidget extends StatelessWidget {
       onTap: onTap,
       child: Card(
         margin: const EdgeInsets.symmetric(vertical: 4),
-        color: isSelected ? _selectedBackgroundCardRight : AppColors.white,
+        color: _selectedBackgroundCardRight,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
           side: BorderSide(
-            color: isSelected ? _selectedBorderCardRight : AppColors.border,
+            color: _selectedBorderCardRight,
           ),
         ),
         child: Padding(
@@ -80,8 +88,7 @@ class AwnserWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   label,
-                  style:
-                      isSelected ? _selectedTextStyleRight : AppTextStyles.body,
+                  style: _selectedTextStyleRight,
                 ),
               ),
               Container(
@@ -92,13 +99,10 @@ class AwnserWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   border:
                       isSelected ? null : Border.all(color: AppColors.border),
-                  boxShadow: isSelected
-                      ? [
-                          BoxShadow(
-                              color: _selectedIconBoxShadowRight,
-                              blurRadius: 12)
-                        ]
-                      : null,
+                  boxShadow: [
+                    BoxShadow(
+                        color: _selectedIconBoxShadowRight, blurRadius: 12)
+                  ],
                 ),
                 child: isSelected
                     ? Icon(

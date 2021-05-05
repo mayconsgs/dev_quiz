@@ -7,19 +7,20 @@ class ChallengeController extends GetxController {
 
   final _questionAnswered = 0.obs;
   final _validateQuestion = false.obs;
-  final _selectedAwnser = 0.obs;
-
-  final RxList<QuestionModel> _questionsList;
+  final _selectedAwnser = 5.obs;
 
   int get questionAnswered => _questionAnswered.value;
   bool get validateQuestion => _validateQuestion.value;
   int get selectedAwnser => _selectedAwnser.value;
+
+  final RxList<QuestionModel> _questionsList;
 
   int get totalQuestions => _questionsList.length;
   List<QuestionModel> get questionsList => _questionsList;
   QuestionModel get currentQuestion => _questionsList[questionAnswered];
 
   bool get finalQuiz => _questionAnswered.value == _questionsList.length;
+  bool get lastQuestion => _questionAnswered.value + 1 == totalQuestions;
 
   ChallengeController(
       int questionAnswered, this._questionsList, this.titleQuiz) {
@@ -37,6 +38,6 @@ class ChallengeController extends GetxController {
   nextQuestion() {
     _questionAnswered.value++;
     _validateQuestion.value = false;
-    _selectedAwnser.value = 0;
+    _selectedAwnser.value = 5;
   }
 }

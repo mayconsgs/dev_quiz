@@ -35,7 +35,7 @@ class QuizWidget extends StatelessWidget {
                               controller.currentQuestion.awnsers.indexOf(e),
                           validate: controller.validateQuestion,
                           onTap: controller.validateQuestion
-                              ? () {}
+                              ? null
                               : () {
                                   controller.selectAwnser(e);
                                 },
