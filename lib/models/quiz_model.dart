@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dev_quiz/models/question_model.dart';
 
 enum Level { facil, medio, dificil, perito }
@@ -23,6 +24,8 @@ extension LevelExt on Level {
 }
 
 class QuizModel {
+  final DocumentReference? reference;
+
   final String title;
   final List<QuestionModel> questions;
   final int questionAnswered;
@@ -35,6 +38,7 @@ class QuizModel {
     required this.image,
     required this.level,
     this.questionAnswered = 0,
+    this.reference,
   });
 
   Map<String, dynamic> toMap() {
@@ -47,8 +51,10 @@ class QuizModel {
     };
   }
 
-  factory QuizModel.fromMap(Map<String, dynamic> map) {
+  factory QuizModel.fromMap(
+      DocumentReference? reference, Map<String, dynamic> map) {
     return QuizModel(
+      reference: reference,
       title: map['title'],
       questions: List<QuestionModel>.from(
           map['questions']?.map((x) => QuestionModel.fromMap(x))),
@@ -61,5 +67,5 @@ class QuizModel {
   String toJson() => json.encode(toMap());
 
   factory QuizModel.fromJson(String source) =>
-      QuizModel.fromMap(json.decode(source));
+      QuizModel.fromMap(null, json.decode(source));
 }

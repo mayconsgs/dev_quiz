@@ -58,8 +58,10 @@ class HomeScreen extends StatelessWidget {
                             (e) => GestureDetector(
                               child: QuizCardWidget(quiz: e),
                               onTap: () {
-                                Get.put(ChallengeController(e.questionAnswered,
-                                    RxList(e.questions), e.title));
+                                Get.put(
+                                  ChallengeController(e.questionAnswered,
+                                      RxList(e.questions), e.title),
+                                );
                                 Get.to(() => ChallengeScreen());
                               },
                             ),

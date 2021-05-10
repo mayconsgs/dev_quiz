@@ -61,13 +61,21 @@ class ChallengeScreen extends StatelessWidget {
               Expanded(
                 child: Obx(
                   () => ElevatedButton(
-                    onPressed: controller.validateQuestion
-                        ? controller.lastQuestion
-                            ? () {
-                                Get.off(() => EndQuizScreen());
-                              }
-                            : controller.nextQuestion
-                        : controller.confirmQuestion,
+                    onPressed: () {
+                      if (!controller.awnserSelected) return null;
+
+                      if (controller.awnserSelected &&
+                          !controller.validateQuestion)
+                        return controller.confirmQuestion();
+
+                      if (controller.lastQuestion) {
+                        Get.to(() => EndQuizScreen());
+                        return;
+                      }
+
+                      if (controller.validateQuestion)
+                        return controller.nextQuestion();
+                    },
                     style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all(AppColors.darkGreen),

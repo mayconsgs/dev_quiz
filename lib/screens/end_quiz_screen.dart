@@ -21,9 +21,12 @@ class EndQuizScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Text('Você concluiu'),
           Text(controller.titleQuiz),
+          Text(
+            'Com ${controller.rightQuestionCount} acertos de ${controller.totalQuestions} questões',
+          ),
           TextButton(
             onPressed: () {
-              controller.onDelete();
+              controller.dispose();
               Get.offAll(() => HomeScreen());
             },
             child: Text('Voltar ao início'),

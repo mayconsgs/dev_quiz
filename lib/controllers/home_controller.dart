@@ -27,8 +27,9 @@ class HomeController extends GetxController {
     final quizzesDocuments =
         await FirebaseFirestore.instance.collection('quizzes').get();
 
-    quizzes =
-        quizzesDocuments.docs.map((e) => QuizModel.fromMap(e.data())).toList();
+    quizzes = quizzesDocuments.docs
+        .map((e) => QuizModel.fromMap(e.reference, e.data()))
+        .toList();
   }
 
   Future<void> getInitialData() async {

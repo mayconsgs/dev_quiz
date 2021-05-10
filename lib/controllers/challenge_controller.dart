@@ -12,6 +12,13 @@ class ChallengeController extends GetxController {
   int get questionAnswered => _questionAnswered.value;
   bool get validateQuestion => _validateQuestion.value;
   int get selectedAwnser => _selectedAwnser.value;
+  bool get awnserSelected =>
+      _selectedAwnser.value >= 0 && _selectedAwnser.value < 4;
+
+  bool _rightQuestion = false;
+  int _rightQuestionCount = 0;
+
+  int get rightQuestionCount => _rightQuestionCount;
 
   final RxList<QuestionModel> _questionsList;
 
@@ -27,15 +34,17 @@ class ChallengeController extends GetxController {
     _questionAnswered.value = questionAnswered;
   }
 
-  selectAwnser(AwnserModel awnser) {
+  void selectAwnser(AwnserModel awnser) {
     _selectedAwnser.value = currentQuestion.awnsers.indexOf(awnser);
+    _rightQuestion = awnser.isRight;
   }
 
-  confirmQuestion() {
+  void confirmQuestion() {
     _validateQuestion.value = true;
+    if (_rightQuestion) _rightQuestionCount++;
   }
 
-  nextQuestion() {
+  void nextQuestion() {
     _questionAnswered.value++;
     _validateQuestion.value = false;
     _selectedAwnser.value = 5;
